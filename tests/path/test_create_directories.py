@@ -1,5 +1,4 @@
 import os
-import stat
 import unittest
 
 from mup.path import temp_path
