@@ -10,7 +10,7 @@ from typing import Generator, Sequence, Union
 
 from .temp_path import temp_path
 
-__all__ = ['create_directories', 'find_files', 'get_unique_name', 'temp_path']
+__all__ = ['create_directories', 'find_files', 'get_unique_name', 'UniqueMode', 'temp_path']
 
 logger = logging.getLogger(__name__)
 
@@ -74,7 +74,7 @@ def get_unique_name(path: str, *, mode: UniqueMode = UniqueMode.RANDOM, **kwargs
     file_name, extension = os.path.splitext(file_name)
 
     for i in range(max_iterations):
-        unique_key = unique_key_fn(i)
+        unique_key = unique_key_fn(i + 1)
         new_file_name = f"{file_name}{delimiter}{unique_key}{extension}"
         check_path = os.path.join(directory, new_file_name)
         if not os.path.isfile(check_path):
