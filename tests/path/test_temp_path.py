@@ -1,8 +1,10 @@
 import os
+import shutil
 import stat
 import unittest
 
 from mup.path import temp_path
+from mup.path.temp_path import handle_remove_readonly
 
 
 class TestTempPath(unittest.TestCase):
@@ -25,3 +27,9 @@ class TestTempPath(unittest.TestCase):
                     fp.write("test")
             self.assertTrue(os.path.isdir(tmp))
         self.assertFalse(os.path.isdir(tmp))
+
+    def test_handle_remove_readonly(self):
+        with temp_path() as tmp:
+            fake_path = os.path.join(tmp, "fake")
+            with self.assertRaises(FileNotFoundError):
+                shutil.rmtree(fake_path, onerror=handle_remove_readonly)
