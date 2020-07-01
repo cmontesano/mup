@@ -62,6 +62,10 @@ class CommandRunner(object):
         result = proc.wait()
 
         if silent:
-            return CommandResult(result, proc.stdout.read(), proc.stderr.read())
+            stdout = proc.stdout.read()
+            stderr = proc.stderr.read()
+            proc.stdout.close()
+            proc.stderr.close()
+            return CommandResult(result, stdout, stderr)
         else:
             return CommandResult(result, None, None)
