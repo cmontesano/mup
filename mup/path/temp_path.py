@@ -13,7 +13,11 @@ def handle_remove_readonly(func, path, exc):
     exc_value = exc[1]
     if func in (os.rmdir, os.remove, os.unlink):
         if exc_value.errno == errno.EACCES:
-            os.chmod(path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)  # 0777
+            if func is not os.rmdir:
+                # make sure parent folder is writable
+                parent_path = os.path.dirname(path)
+                os.chmod(parent_path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
+            os.chmod(path, stat.S_IRWXU | stat.S_IRWXG | stat.S_IRWXO)
             func(path)
             return
     raise
