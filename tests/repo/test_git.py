@@ -29,7 +29,9 @@ class TestGit(unittest.TestCase):
         with open(os.path.join(cls.repo_dir, "README.md"), "w") as fp:
             fp.write("# Test Repository\n")
         cmd.run(("git", "add", "README.md"), silent=True)
-        cmd.run(("git", "commit", "-m", "initial commit"), silent=True)
+        result = cmd.run(("git", "commit", "-m", "initial commit"), silent=True)
+        if result.result != 0:
+            raise RuntimeError(f"commit failed ({result.result}): {result.stderr}")
 
         cls.commit_id_long = git.commit_id(cls.repo_dir)
         cls.commit_id_short = git.commit_id(cls.repo_dir, short=True)
