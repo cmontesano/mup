@@ -5,7 +5,7 @@ import sys
 from .command_runner import CommandRunner, CommandResult
 
 
-def open_file(filename):
+def open_file(filename: str) -> None:
     """ A basic attempt at a cross platform version of `os.startfile`. """
     if sys.platform == "win32":
         os.startfile(filename)
