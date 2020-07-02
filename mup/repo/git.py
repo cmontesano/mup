@@ -3,10 +3,6 @@ import os
 
 from mup.proc import CommandRunner
 
-REPOSITORY_IDENTIFIERS = (
-    ("git", ["git", "rev-parse"]),
-)
-
 logger = logging.getLogger(__name__)
 
 
