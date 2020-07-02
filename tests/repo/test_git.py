@@ -25,6 +25,9 @@ class TestGit(unittest.TestCase):
         cmd = CommandRunner(cwd=cls.repo_dir)
         cmd.run(("git", "init"), silent=True)
 
+        cmd.run(("git", "config", "user.email", "cmdev.00+mup@gmail.com"), silent=True)
+        cmd.run(("git", "config", "user.name", "Christopher Montesano"), silent=True)
+
         # create and check-in a file
         with open(os.path.join(cls.repo_dir, "README.md"), "w") as fp:
             fp.write("# Test Repository\n")
