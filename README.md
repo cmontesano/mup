@@ -1,6 +1,6 @@
 # mup
 
-Miscellaneous utility package.
+Miscellaneous utility package for Python 3.7+.
 
 ## Usage
 
