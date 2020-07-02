@@ -7,10 +7,13 @@ logger = logging.getLogger(__name__)
 
 
 def is_path_repository(path: str) -> bool:
+    """ Check if a path contains a git repository. """
     return CommandRunner(cwd=path).run(("git", "rev-parse")).result == 0
 
 
 def commit_id(path: str, *, short: bool = False) -> str:
+    """ Fetch the current commit id (optionally the short version) from a git
+     repository located at `path`. """
     command = ["git", "rev-parse"]
     if short:
         command.append("--short")
@@ -22,6 +25,9 @@ def commit_id(path: str, *, short: bool = False) -> str:
 
 
 def clone(url: str, *, destination: str, branch: str = "master") -> str:
+    """ Clone a remote repository to `destination` and check out `branch`. This
+    also mimics the behavior of creating a subfolder based on the name of the
+    repository. """
     logger.info("Cloning repository %s", url)
     logger.debug("Repository branch %s", branch)
     logger.debug("Repository destination %s", destination)

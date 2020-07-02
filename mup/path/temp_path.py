@@ -10,6 +10,13 @@ logger = logging.getLogger(__name__)
 
 
 def handle_remove_readonly(func, path, exc):
+    """ Sometimes `shutil.rmtree` needs some help when it cones across read-only
+    files or folders. This seems to be especially True when working with git
+    repositories on Windows systems. Passing this method as `rmtree`'s `onerror`
+    argument will attempt to change permissions on any problem files or folders,
+    and retry the failed operation. If the operation still fails the original
+    exception will be re-raised.
+    """
     exc_value = exc[1]
     if func in (os.rmdir, os.remove, os.unlink):
         if exc_value.errno == errno.EACCES:
@@ -25,6 +32,15 @@ def handle_remove_readonly(func, path, exc):
 
 @contextlib.contextmanager
 def temp_path():
+    """ Context manager to create a temporary path and clean it up automatically.
+
+    >>> with temp_path() as tmp:
+    ...     os.path.isdir(tmp)
+    True
+    >>> os.path.isdir(tmp)
+    False
+
+    """
     tmp_dir = tempfile.mkdtemp()
     logger.debug(f"created temp folder {tmp_dir}")
     try:
@@ -32,3 +48,8 @@ def temp_path():
     finally:
         logger.debug(f"removing temp folder {tmp_dir}")
         shutil.rmtree(tmp_dir, onerror=handle_remove_readonly)
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()

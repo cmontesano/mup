@@ -12,6 +12,26 @@ logger = logging.getLogger(__name__)
 
 
 class CommandRunner(object):
+    """ A wrapper around `subprocess.Popen` with basic environment manipulation.
+    The results of a subprocess operation will be returned as a `CommandResult`
+    object, which includes the return code, and stdout/stderr. Note that
+    stdout/stderr will only be populated if the command was run silently.
+
+    >>> c = CommandRunner(env={})
+    >>> c.env_var_add("TEST", "1234")
+    >>> c.env['TEST']
+    '1234'
+    >>> if os.name == "nt":
+    ...     command = "set"
+    ... elif os.name == "posix":
+    ...     command = "printenv"
+    >>> result = c.run(command, silent=True)
+    >>> result.result == 0
+    True
+    >>> result.stdout.count("TEST=1234")
+    1
+
+    """
     def __init__(self, **kwargs):
         self.cwd = kwargs.get('cwd', os.getcwd())
         self.env = kwargs.get('env', os.environ.copy())
@@ -69,3 +89,8 @@ class CommandRunner(object):
             return CommandResult(result, stdout, stderr)
         else:
             return CommandResult(result, None, None)
+
+
+if __name__ == '__main__':
+    import doctest
+    doctest.testmod()
