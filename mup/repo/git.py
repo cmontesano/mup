@@ -14,7 +14,7 @@ def is_path_repository(path: str) -> bool:
     return CommandRunner(cwd=path).run(("git", "rev-parse")).result == 0
 
 
-def commit_id(path: str, short: bool = False) -> str:
+def commit_id(path: str, *, short: bool = False) -> str:
     command = ["git", "rev-parse"]
     if short:
         command.append("--short")
