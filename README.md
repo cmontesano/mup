@@ -2,6 +2,8 @@
 
 Miscellaneous utility package for Python 3.7+.
 
+![Python Unittest](https://github.com/cmontesano/mup/workflows/Python%20Unittest/badge.svg)
+
 ## Usage
 
 ### mup.path.create_directories
