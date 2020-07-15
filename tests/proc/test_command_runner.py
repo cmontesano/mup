@@ -10,24 +10,32 @@ class TestCommandRunner(unittest.TestCase):
     def test_basic_command(self):
         with temp_path() as tmp:
             cmd = CommandRunner(cwd=tmp)
-            cmd.run(("mkdir", "test"), silent=False)
+            if os.name == "nt":
+                cmd.run(("mkdir", "test"), silent=False, shell=True)
+            else:
+                cmd.run(("mkdir", "test"), silent=False)
             self.assertTrue(os.path.isdir(os.path.join(tmp, "test")))
 
     def test_basic_command_silent(self):
         with temp_path() as tmp:
             cmd = CommandRunner(cwd=tmp)
-            cmd.run(("mkdir", "test"), silent=True)
+            if os.name == "nt":
+                cmd.run(("mkdir", "test"), silent=True, shell=True)
+            else:
+                cmd.run(("mkdir", "test"), silent=True)
             self.assertTrue(os.path.isdir(os.path.join(tmp, "test")))
 
     def test_basic_command_output(self):
         with temp_path() as tmp:
             cmd = CommandRunner(cwd=tmp)
-            cmd.run(("mkdir", "test"), silent=True)
-            self.assertTrue(os.path.isdir(os.path.join(tmp, "test")))
             if os.name == "nt":
-                output = cmd.run("dir", silent=True)
+                cmd.run(("mkdir", "test"), silent=True, shell=True)
+                self.assertTrue(os.path.isdir(os.path.join(tmp, "test")))
+                output = cmd.run("dir", silent=True, shell=True)
                 match_pattern = r"^.*?<DIR>\s+test$"
             else:
+                cmd.run(("mkdir", "test"), silent=True)
+                self.assertTrue(os.path.isdir(os.path.join(tmp, "test")))
                 output = cmd.run(("ls", "-l"), silent=True)
                 match_pattern = r"^[d].*\s(?:test)$"
             matched = False
