@@ -1,3 +1,5 @@
+## Update: The functionality of this package is being migrated to [xappt](https://github.com/cmontesano/xappt).
+
 # mup
 
 Miscellaneous utility package for Python 3.7+.
@@ -5,24 +7,6 @@ Miscellaneous utility package for Python 3.7+.
 ![Python Unittest](https://github.com/cmontesano/mup/workflows/Python%20Unittest/badge.svg)
 
 ## Usage
-
-### mup.path.create_directories
-
-Like `os.makedirs`, but will not error if the destination path already exists. You can also avoid using `os.path.dirname` by passing in a full file path and setting `is_file` to `True`.
-
-```python
-import os
-import tempfile
-
-from mup.path import create_directories
-
-tmp_dir = tempfile.mkdtemp()
-test_path = os.path.join(tmp_dir, "fake", "path", "here.txt")
-
-create_directories(test_path, is_file=True)
-
-assert os.path.isdir(os.path.dirname(test_path))
-```
 
 ### mup.path.get_unique_name
 
